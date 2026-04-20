@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ toJSON: { virtuals: true } })
 export class Car extends Document {
   @Prop({ unique: true, index: true })
   nombre: string;
@@ -17,3 +17,7 @@ export class Car extends Document {
 }
 
 export const CarSchema = SchemaFactory.createForClass(Car);
+
+CarSchema.virtual('isClassic').get(function () {
+  return new Date().getFullYear() - this.anio > 25;
+});
